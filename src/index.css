@@ -1,0 +1,8 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+
+body {
+background: linear-gradient(180deg,#020617,#061021);
+color: #e6eef8;
+min-height: 100vh;
+}
