@@ -10,7 +10,6 @@ import NotFound from './pages/NotFound'
 
 export default function App(){
 return (
-  <HashRouter>
   <div className="d-flex flex-column min-vh-100">
     <Navbar />
     <main className="flex-grow-1 container py-4">
@@ -23,6 +22,5 @@ return (
       </Routes>
     </main>
   </div>
-  </HashRouter>
 )
 }
