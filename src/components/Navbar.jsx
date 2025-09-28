@@ -6,7 +6,7 @@ export default function Navbar(){
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div className="container">
-                <NavLink className="navbar-brand" to="/">My Website</NavLink>
+                <NavLink className="navbar-brand" to="/">Schedule Builder</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span className="navbar-toggler-icon"></span>
                 </button>
