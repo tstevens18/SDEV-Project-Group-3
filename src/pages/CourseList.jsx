@@ -10,7 +10,7 @@ export default function CourseList() {
   const [editingCourse, setEditingCourse] = useState(null);
   const [formData, setFormData] = useState({ title: '', description: '' });
 
-  // Fetch courses from API
+
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -31,7 +31,7 @@ export default function CourseList() {
     }
   };
 
-  // Create new course
+ 
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
@@ -49,7 +49,7 @@ export default function CourseList() {
     }
   };
 
-  // Update existing course
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -67,7 +67,7 @@ export default function CourseList() {
     }
   };
 
-  // Delete course
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this course?')) return;
     try {
@@ -80,7 +80,7 @@ export default function CourseList() {
     }
   };
 
-  // Modal handlers
+
   const handleOpenModal = (course = null) => {
     setEditingCourse(course);
     setFormData(course ? { title: course.title, description: course.description } : { title: '', description: '' });
@@ -130,7 +130,7 @@ export default function CourseList() {
         ))}
       </div>
 
-      {/* Modal for Create/Edit */}
+      {}
       {showModal && (
         <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
