@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend API Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Backend API Tester</h1>
+        <p>Use this tool to test your backend API before deploying the frontend.</p>
+        
+        <label for="apiUrl">API Base URL:</label>
+        <input type="text" id="apiUrl" placeholder="https://your-app.onrender.com" value="http://localhost:5000">
+        
+        <div style="margin-top: 20px;">
+            <button onclick="testHealth()">Test Health Check</button>
+            <button onclick="testGetCourses()">Get All Courses</button>
+            <button onclick="testCreateCourse()">Create Test Course</button>
+        </div>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function getApiUrl() {
+            return document.getElementById('apiUrl').value.trim();
+        }
+
+        function showResult(message, isSuccess = true) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result ' + (isSuccess ? 'success' : 'error');
+            resultDiv.style.display = 'block';
+        }
+
+        async function testHealth() {
+            try {
+                const response = await fetch(getApiUrl());
+                const data = await response.json();
+                showResult('✅ Health Check Successful!\n\n' + JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                showResult('❌ Health Check Failed!\n\n' + error.message, false);
+            }
+        }
+
+        async function testGetCourses() {
+            try {
+                const response = await fetch(getApiUrl() + '/api/courses');
+                const data = await response.json();
+                showResult('✅ Get Courses Successful!\n\nFound ' + data.length + ' courses:\n\n' + JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                showResult('❌ Get Courses Failed!\n\n' + error.message, false);
+            }
+        }
+
+        async function testCreateCourse() {
+            try {
+                const testCourse = {
+                    title: 'Test Course ' + Date.now(),
+                    description: 'This is a test course created at ' + new Date().toLocaleString()
+                };
+                
+                const response = await fetch(getApiUrl() + '/api/courses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testCourse)
+                });
+                
+                const data = await response.json();
+                showResult('✅ Create Course Successful!\n\n' + JSON.stringify(data, null, 2), true);
+            } catch (error) {
+                showResult('❌ Create Course Failed!\n\n' + error.message, false);
+            }
+        }
+    </script>
+</body>
+</html>
