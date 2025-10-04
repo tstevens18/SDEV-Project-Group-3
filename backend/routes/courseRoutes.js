@@ -1,47 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+import Course from '../models/Course.js';
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const router = express.Router();
 
 
-app.use(cors({
-  origin: ['https://tstevens18.github.io', 'http://localhost:5173'],
-  credentials: true
-}));
-app.use(express.json());
-
-
-const MONGODB_URI = 'mongodb+srv://sdev255:dbUserPassword@courses.brqsl8u.mongodb.net/coursedb?retryWrites=true&w=majority&appName=courses';
-
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-
-const courseSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  }
-}, {
-  timestamps: true
-});
-
-const Course = mongoose.model('Course', courseSchema);
-
-
-app.get('/', (req, res) => {
-  res.json({ message: 'Course Management API is running', status: 'healthy' });
-});
-
-
-app.get('/api/courses', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const courses = await Course.find();
     res.json(courses);
@@ -51,7 +14,7 @@ app.get('/api/courses', async (req, res) => {
 });
 
 
-app.get('/api/courses/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course) {
@@ -64,10 +27,20 @@ app.get('/api/courses/:id', async (req, res) => {
 });
 
 
-app.post('/api/courses', async (req, res) => {
+router.post('/', async (req, res) => {
+  const subject = req.body.subject && req.body.subject.trim() !== '' 
+    ? req.body.subject.trim() 
+    : 'Not Specified';
+  
+  const credits = req.body.credits !== undefined && req.body.credits !== '' && req.body.credits !== null 
+    ? Number(req.body.credits) 
+    : 0;
+  
   const course = new Course({
     title: req.body.title,
-    description: req.body.description
+    description: req.body.description,
+    subject: subject,
+    credits: credits
   });
 
   try {
@@ -79,7 +52,7 @@ app.post('/api/courses', async (req, res) => {
 });
 
 
-app.put('/api/courses/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course) {
@@ -88,6 +61,10 @@ app.put('/api/courses/:id', async (req, res) => {
 
     course.title = req.body.title || course.title;
     course.description = req.body.description || course.description;
+    course.subject = req.body.subject && req.body.subject.trim() !== '' ? req.body.subject : course.subject;
+    course.credits = req.body.credits !== undefined && req.body.credits !== '' && req.body.credits !== null 
+      ? Number(req.body.credits) 
+      : course.credits;
 
     const updatedCourse = await course.save();
     res.json(updatedCourse);
@@ -97,7 +74,7 @@ app.put('/api/courses/:id', async (req, res) => {
 });
 
 
-app.delete('/api/courses/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course) {
@@ -111,6 +88,4 @@ app.delete('/api/courses/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+export default router;
