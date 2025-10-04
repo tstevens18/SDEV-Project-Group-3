@@ -54,16 +54,6 @@ export default function Login(){
                             <i className="bi bi-box-arrow-in-right me-2"></i>Sign In
                         </button>
 
-                        <div className="text-center mb-3">
-                            <span className="text-muted small">or continue with</span>
-                        </div>
-
-                        <div className="d-grid gap-2">
-                            <button type="button" className="btn btn-outline-light">
-                                <i className="bi bi-google me-2"></i>Google
-                            </button>
-                        </div>
-
                         <div className="text-center mt-4">
                             <p className="text-muted small mb-0">
                                 Don't have an account? 
