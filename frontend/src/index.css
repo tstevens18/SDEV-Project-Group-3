@@ -258,3 +258,10 @@ p {
 textarea.form-control {
   min-height: 100px;
 }
+
+.subtext{
+  font-size:12px; 
+  font-weight:normal; 
+  padding:10px 0px; 
+  margin:0px;
+}

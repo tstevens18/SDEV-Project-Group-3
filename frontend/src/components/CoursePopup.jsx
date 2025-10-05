@@ -10,6 +10,30 @@ export default function CoursePopup({
 }) {
   if (!show) return null;
 
+  let validTitle = function(){
+    console.log("validating title")
+
+    let submitButton = document.querySelector('#submitBtn')
+    
+    let courseName = formData.title;
+    let courseNum = courseName.slice(-3);
+    let coursePrefix = courseName.slice(0, 4);
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    if (!isNumeric(courseNum) || isNumeric(coursePrefix)) {
+      console.log("disabled")
+      submitButton.disabled = true;
+      submitButton.style.background = 'rgba(139, 146, 176, 0.2)';
+    }
+    else{
+      submitButton.disabled = false;
+      submitButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    }
+  }
+
   return (
     <div 
       className="modal show d-block" 
@@ -57,7 +81,8 @@ export default function CoursePopup({
             <div className="modal-body">
               <div className="mb-3">
                 <label className="form-label fw-bold" style={{color: '#a8b0cf'}}>
-                  <i className="bi bi-card-heading me-2"></i>Title
+                  <i className="bi bi-card-heading me-2"></i>Title 
+                  <span><p class = "subtext">Must be 7 Characters</p></span>
                 </label>
                 <input
                   type="text"
@@ -65,6 +90,9 @@ export default function CoursePopup({
                   name="title"
                   value={formData.title}
                   onChange={onChange}
+                  placeholder="e.g., MATH101"
+                  maxlength = "7"
+                  minlength = "7"
                   required
                   style={{
                     background: 'rgba(102, 126, 234, 0.1)',
@@ -72,11 +100,13 @@ export default function CoursePopup({
                     color: '#e6eef8',
                     padding: '0.75rem'
                   }}
+                  onKeyUp={validTitle}
                 />
               </div>
               <div className="mb-3">
                 <label className="form-label fw-bold" style={{color: '#a8b0cf'}}>
                   <i className="bi bi-book me-2"></i>Subject
+                  <span><p class = "subtext">Max 50 Characters</p></span>
                 </label>
                 <input
                   type="text"
@@ -84,6 +114,7 @@ export default function CoursePopup({
                   name="subject"
                   value={formData.subject}
                   onChange={onChange}
+                  maxlength = "50"
                   placeholder="e.g., Computer Science, Mathematics"
                   required
                   style={{
@@ -104,6 +135,7 @@ export default function CoursePopup({
                   name="credits"
                   value={formData.credits}
                   onChange={onChange}
+                  placeholder='1 - 10'
                   min="0"
                   max="10"
                   step="0.5"
@@ -119,12 +151,14 @@ export default function CoursePopup({
               <div className="mb-3">
                 <label className="form-label fw-bold" style={{color: '#a8b0cf'}}>
                   <i className="bi bi-text-paragraph me-2"></i>Description
+                  <span><p class = "subtext">Max 250 Characters</p></span>
                 </label>
                 <textarea
                   className="form-control"
                   name="description"
                   value={formData.description}
                   onChange={onChange}
+                  maxlength = "250"
                   rows="4"
                   required
                   style={{
@@ -165,6 +199,7 @@ export default function CoursePopup({
               <button 
                 type="submit" 
                 className="btn px-4"
+                id = "submitBtn"
                 style={{
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   border: 'none',
@@ -180,6 +215,7 @@ export default function CoursePopup({
                   e.target.style.transform = 'translateY(0)';
                   e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
                 }}
+                
               >
                 <i className={`bi ${editingCourse ? 'bi-check-circle' : 'bi-plus-circle'} me-2`}></i>
                 {editingCourse ? 'Update Course' : 'Create Course'}
