@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import courseRoutes from './routes/courseRoutes.js';
-
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -35,7 +35,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Course Manager API is running', status: 'healthy' });
 });
 
-
+// Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 
 

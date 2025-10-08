@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function CourseCard({ course, index, onEdit, onDelete }) {
+export default function CourseCard({ course, index, onEdit, onDelete, isTeacher }) {
   return (
     <div className="col-md-6 col-lg-4">
       <div 
@@ -65,48 +65,50 @@ export default function CourseCard({ course, index, onEdit, onDelete }) {
             </div>
           </div>
           
-          <div className="d-flex gap-2 mt-auto">
-            <button 
-              className="btn btn-sm flex-fill" 
-              onClick={() => onEdit(course)}
-              style={{
-                background: 'rgba(102, 126, 234, 0.2)',
-                border: '1px solid rgba(102, 126, 234, 0.3)',
-                color: '#667eea',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(102, 126, 234, 0.3)';
-                e.target.style.borderColor = 'rgba(102, 126, 234, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(102, 126, 234, 0.2)';
-                e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
-              }}
-            >
-              <i className="bi bi-pencil me-1"></i>Edit
-            </button>
-            <button 
-              className="btn btn-sm flex-fill" 
-              onClick={() => onDelete(course._id)}
-              style={{
-                background: 'rgba(239, 68, 68, 0.2)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#ef4444',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(239, 68, 68, 0.3)';
-                e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(239, 68, 68, 0.2)';
-                e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-              }}
-            >
-              <i className="bi bi-trash me-1"></i>Delete
-            </button>
-          </div>
+          {isTeacher && (
+            <div className="d-flex gap-2 mt-auto">
+              <button 
+                className="btn btn-sm flex-fill" 
+                onClick={() => onEdit(course)}
+                style={{
+                  background: 'rgba(102, 126, 234, 0.2)',
+                  border: '1px solid rgba(102, 126, 234, 0.3)',
+                  color: '#667eea',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(102, 126, 234, 0.3)';
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(102, 126, 234, 0.2)';
+                  e.target.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+                }}
+              >
+                <i className="bi bi-pencil me-1"></i>Edit
+              </button>
+              <button 
+                className="btn btn-sm flex-fill" 
+                onClick={() => onDelete(course._id)}
+                style={{
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  color: '#ef4444',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'rgba(239, 68, 68, 0.3)';
+                  e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(239, 68, 68, 0.2)';
+                  e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                }}
+              >
+                <i className="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

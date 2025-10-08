@@ -21,7 +21,7 @@ export default function About(){
                         <p className="text-light mb-0" style={{fontSize: '1.1rem', lineHeight: '1.8'}}>
                             Course Manager is designed to provide a seamless experience for managing academic courses. 
                             Our platform enables educators to create, read, update, and delete course 
-                            information efficiently, ensuring accurate and up-to-date course catalogs.
+                            information efficiently, ensuring accurate and up-to-date course catalogs. It also allows students to view available courses.
                         </p>
                     </div>
 

@@ -1,9 +1,10 @@
 import express from 'express';
 import Course from '../models/Course.js';
+import { authenticate, authorizeTeacher } from '../middleware/auth.js';
 
 const router = express.Router();
 
-
+// Public routes - anyone can view courses
 router.get('/', async (req, res) => {
   try {
     const courses = await Course.find();
@@ -12,7 +13,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 router.get('/:id', async (req, res) => {
   try {
@@ -26,8 +26,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
-router.post('/', async (req, res) => {
+// Protected routes - only teachers can create, update, delete
+router.post('/', authenticate, authorizeTeacher, async (req, res) => {
   const subject = req.body.subject && req.body.subject.trim() !== '' 
     ? req.body.subject.trim() 
     : 'Not Specified';
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, authorizeTeacher, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course) {
@@ -73,8 +73,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticate, authorizeTeacher, async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
     if (!course) {

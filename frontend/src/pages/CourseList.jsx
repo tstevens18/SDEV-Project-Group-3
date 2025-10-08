@@ -1,9 +1,11 @@
 import React from 'react';
 import { useCourses } from '../hooks/useCourses';
+import { useAuth } from '../hooks/useAuth';
 import CourseCard from '../components/CourseCard';
 import CoursePopup from '../components/CoursePopup';
 
 export default function CourseList() {
+  const { isTeacher, isAuthenticated } = useAuth();
   const {
     courses,
     loading,
@@ -45,23 +47,34 @@ export default function CourseList() {
           <h2 className="fw-bold mb-2">
             <span className="text-gradient">Available Courses</span>
           </h2>
-          <p className="text-muted mb-0">Manage your course catalog</p>
+          <p className="text-muted mb-0">
+            {isTeacher() ? 'Manage your course catalog' : 'Browse available courses'}
+          </p>
         </div>
-        <button 
-          className="btn btn-primary btn-lg px-4" 
-          onClick={() => handleOpenPopup()}
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            border: 'none',
-            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
-          onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
-        >
-          <i className="bi bi-plus-circle me-2"></i>Add New Course
-        </button>
+        {isTeacher() && (
+          <button 
+            className="btn btn-primary btn-lg px-4" 
+            onClick={() => handleOpenPopup()}
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <i className="bi bi-plus-circle me-2"></i>Add New Course
+          </button>
+        )}
       </div>
+
+      {!isAuthenticated() && (
+        <div className="alert alert-info mb-4" role="alert">
+          <i className="bi bi-info-circle me-2"></i>
+          You are viewing courses as a guest. <a href="#/login" className="alert-link">Login</a> to access more features.
+        </div>
+      )}
 
       <div className="row g-4">
         {courses.map((course, index) => (
@@ -71,18 +84,21 @@ export default function CourseList() {
             index={index}
             onEdit={handleOpenPopup}
             onDelete={handleDelete}
+            isTeacher={isTeacher()}
           />
         ))}
       </div>
 
-      <CoursePopup
-        show={showPopup}
-        editingCourse={editingCourse}
-        formData={formData}
-        onClose={handleClosePopup}
-        onSubmit={editingCourse ? handleUpdate : handleCreate}
-        onChange={handleInputChange}
-      />
+      {isTeacher() && (
+        <CoursePopup
+          show={showPopup}
+          editingCourse={editingCourse}
+          formData={formData}
+          onClose={handleClosePopup}
+          onSubmit={editingCourse ? handleUpdate : handleCreate}
+          onChange={handleInputChange}
+        />
+      )}
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 
 export default function Home(){
+    const { isAuthenticated, user } = useAuth()
+
 return (
     <div className="text-center py-5">
         <div className="fade-in-up mb-5">
@@ -12,6 +15,26 @@ return (
             <p className="lead text-muted mb-4" style={{maxWidth: '700px', margin: '0 auto'}}>
                 A powerful course management system. Create, view, update, and delete courses with ease.
             </p>
+            {isAuthenticated() && (
+                <div 
+                    className="glass-card d-inline-block px-4 py-3 mb-3"
+                    style={{
+                        background: 'rgba(102, 126, 234, 0.1)',
+                        border: '1px solid rgba(102, 126, 234, 0.3)',
+                        boxShadow: '0 4px 15px rgba(102, 126, 234, 0.2)'
+                    }}
+                >
+                    <i className="bi bi-check-circle-fill me-2" style={{color: '#667eea'}}></i>
+                    <span className="text-light">Welcome back, </span>
+                    <strong className="text-gradient">{user?.name}</strong>
+                    <span className="badge ms-2" style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        fontSize: '0.75rem'
+                    }}>
+                        {user?.role}
+                    </span>
+                </div>
+            )}
         </div>
 
         <div className="row g-4 mb-5 fade-in-up" style={{animationDelay: '0.2s'}}>
@@ -57,6 +80,21 @@ return (
             <NavLink to="/courses" className="btn btn-primary btn-lg px-5">
                 <i className="bi bi-book me-2"></i>Manage Courses
             </NavLink>
+            {!isAuthenticated() && (
+                <NavLink 
+                    to="/login" 
+                    className="btn btn-lg px-5"
+                    style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        border: 'none',
+                        color: 'white',
+                        boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                        transition: 'all 0.3s ease'
+                    }}
+                >
+                    <i className="bi bi-box-arrow-in-right me-2"></i>Login / Sign Up
+                </NavLink>
+            )}
             <NavLink to="/about" className="btn btn-outline-light btn-lg px-5">
                 <i className="bi bi-info-circle me-2"></i>Learn More
             </NavLink>
