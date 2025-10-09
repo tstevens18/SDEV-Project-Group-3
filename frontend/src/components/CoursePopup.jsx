@@ -201,11 +201,12 @@ export default function CoursePopup({
                 className="btn px-4"
                 id = "submitBtn"
                 style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'rgba(139, 146, 176, 0.2)',
                   border: 'none',
                   color: '#fff',
                   boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  disabled
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.transform = 'translateY(-2px)';
