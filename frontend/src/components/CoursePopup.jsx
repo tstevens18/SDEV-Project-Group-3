@@ -205,9 +205,9 @@ export default function CoursePopup({
                   border: 'none',
                   color: '#fff',
                   boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
-                  transition: 'all 0.3s ease',
-                  disabled
+                  transition: 'all 0.3s ease'
                 }}
+                disabled
                 onMouseEnter={(e) => {
                   e.target.style.transform = 'translateY(-2px)';
                   e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.5)';
