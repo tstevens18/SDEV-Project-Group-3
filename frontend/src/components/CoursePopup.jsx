@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function CoursePopup({ 
   show, 
@@ -9,6 +9,12 @@ export default function CoursePopup({
   onChange 
 }) {
   if (!show) return null;
+
+  useEffect(() => {
+    if (show && formData.title) {
+      validTitle();
+    }
+  }, [show, formData.title]);
 
   let validTitle = function(){
     console.log("validating title")
