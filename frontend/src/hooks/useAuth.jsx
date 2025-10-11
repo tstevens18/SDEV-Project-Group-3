@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const loadUser = async () => {
       const storedToken = localStorage.getItem('token');
@@ -34,7 +33,6 @@ export const AuthProvider = ({ children }) => {
             setUser(data.user);
             setToken(storedToken);
           } else {
-            
             localStorage.removeItem('token');
             setToken(null);
             setUser(null);

@@ -1,6 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useCart } from '../hooks/useCart.jsx';
 
 export default function CourseCard({ course, index, onEdit, onDelete, isTeacher }) {
+  const { isStudent, isAuthenticated } = useAuth();
+  const { addToCart, removeFromCart, isInCart, isEnrolled } = useCart();
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const handleCartAction = async () => {
+    setActionLoading(true);
+    try {
+      if (isInCart(course._id)) {
+        const result = await removeFromCart(course._id);
+        if (!result.success) {
+          alert(result.message);
+        }
+      } else {
+        const result = await addToCart(course._id);
+        if (!result.success) {
+          alert(result.message);
+        }
+      }
+    } catch (error) {
+      console.error('Cart action error:', error);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const inCart = isInCart(course._id);
+  const enrolled = isEnrolled(course._id);
   return (
     <div className="col-md-6 col-lg-4">
       <div 
@@ -107,6 +136,64 @@ export default function CourseCard({ course, index, onEdit, onDelete, isTeacher 
               >
                 <i className="bi bi-trash me-1"></i>Delete
               </button>
+            </div>
+          )}
+
+          {isStudent() && isAuthenticated() && (
+            <div className="mt-auto">
+              {enrolled ? (
+                <button 
+                  className="btn btn-sm w-100" 
+                  disabled
+                  style={{
+                    background: 'rgba(102, 126, 234, 0.2)',
+                    border: '1px solid rgba(102, 126, 234, 0.3)',
+                    color: '#667eea',
+                    cursor: 'not-allowed',
+                    opacity: 0.7
+                  }}
+                >
+                  <i className="bi bi-check-circle me-2"></i>
+                  Already Enrolled
+                </button>
+              ) : (
+                <button 
+                  className="btn btn-sm w-100" 
+                  onClick={handleCartAction}
+                  disabled={actionLoading}
+                  style={{
+                    background: inCart ? 'rgba(239, 68, 68, 0.2)' : 'rgba(34, 197, 94, 0.2)',
+                    border: inCart ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(34, 197, 94, 0.3)',
+                    color: inCart ? '#ef4444' : '#22c55e',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (inCart) {
+                      e.target.style.background = 'rgba(239, 68, 68, 0.3)';
+                      e.target.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+                    } else {
+                      e.target.style.background = 'rgba(34, 197, 94, 0.3)';
+                      e.target.style.borderColor = 'rgba(34, 197, 94, 0.5)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (inCart) {
+                      e.target.style.background = 'rgba(239, 68, 68, 0.2)';
+                      e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                    } else {
+                      e.target.style.background = 'rgba(34, 197, 94, 0.2)';
+                      e.target.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+                    }
+                  }}
+                >
+                  {actionLoading ? (
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  ) : (
+                    <i className={`bi ${inCart ? 'bi-cart-x' : 'bi-cart-plus'} me-2`}></i>
+                  )}
+                  {inCart ? 'Remove from Cart' : 'Add to Cart'}
+                </button>
+              )}
             </div>
           )}
         </div>

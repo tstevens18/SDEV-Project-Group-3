@@ -24,7 +24,11 @@ const userSchema = new mongoose.Schema({
     enum: ['student', 'teacher'],
     default: 'student',
     required: true
-  }
+  },
+  cart: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  }]
 }, {
   timestamps: true
 });

@@ -4,7 +4,6 @@ import { authenticate, authorizeTeacher } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Public routes - anyone can view courses
 router.get('/', async (req, res) => {
   try {
     const courses = await Course.find();
@@ -26,7 +25,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Protected routes - only teachers can create, update, delete
 router.post('/', authenticate, authorizeTeacher, async (req, res) => {
   const subject = req.body.subject && req.body.subject.trim() !== '' 
     ? req.body.subject.trim() 
