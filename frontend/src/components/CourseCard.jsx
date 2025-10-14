@@ -3,9 +3,17 @@ import { useAuth } from '../hooks/useAuth';
 import { useCart } from '../hooks/useCart.jsx';
 
 export default function CourseCard({ course, index, onEdit, onDelete, isTeacher }) {
-  const { isStudent, isAuthenticated } = useAuth();
+  const { isStudent, isAuthenticated, user } = useAuth();
   const { addToCart, removeFromCart, isInCart, isEnrolled } = useCart();
   const [actionLoading, setActionLoading] = useState(false);
+  
+
+  const isCreator = !course.createdBy || (user && (
+    user.id === course.createdBy || 
+    user.id === course.createdBy._id ||
+    String(user.id) === String(course.createdBy) ||
+    String(user.id) === String(course.createdBy._id)
+  ));
 
   const handleCartAction = async () => {
     setActionLoading(true);
@@ -94,7 +102,7 @@ export default function CourseCard({ course, index, onEdit, onDelete, isTeacher 
             </div>
           </div>
           
-          {isTeacher && (
+          {isTeacher && isCreator && (
             <div className="d-flex gap-2 mt-auto">
               <button 
                 className="btn btn-sm flex-fill" 

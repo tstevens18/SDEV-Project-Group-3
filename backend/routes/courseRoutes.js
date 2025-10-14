@@ -38,7 +38,8 @@ router.post('/', authenticate, authorizeTeacher, async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     subject: subject,
-    credits: credits
+    credits: credits,
+    createdBy: req.user._id
   });
 
   try {
@@ -55,6 +56,11 @@ router.put('/:id', authenticate, authorizeTeacher, async (req, res) => {
     const course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
+    }
+
+    
+    if (course.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'You can only edit courses you created' });
     }
 
     course.title = req.body.title || course.title;
@@ -76,6 +82,11 @@ router.delete('/:id', authenticate, authorizeTeacher, async (req, res) => {
     const course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
+    }
+
+    
+    if (course.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'You can only delete courses you created' });
     }
 
     await course.deleteOne();

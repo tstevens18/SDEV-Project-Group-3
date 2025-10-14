@@ -20,6 +20,11 @@ const courseModel = new mongoose.Schema({
     default: 0,
     min: 0,
     max: 10
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true
