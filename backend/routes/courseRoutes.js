@@ -6,7 +6,19 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const courses = await Course.find();
+    const { search } = req.query;
+    let query = {};
+    
+    if (search) {
+      query = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { courseNumber: { $regex: search, $options: 'i' } }
+        ]
+      };
+    }
+    
+    const courses = await Course.find(query);
     res.json(courses);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -35,6 +47,7 @@ router.post('/', authenticate, authorizeTeacher, async (req, res) => {
     : 0;
   
   const course = new Course({
+    courseNumber: req.body.courseNumber,
     title: req.body.title,
     description: req.body.description,
     subject: subject,
@@ -63,6 +76,7 @@ router.put('/:id', authenticate, authorizeTeacher, async (req, res) => {
       return res.status(403).json({ message: 'You can only edit courses you created' });
     }
 
+    course.courseNumber = req.body.courseNumber || course.courseNumber;
     course.title = req.body.title || course.title;
     course.description = req.body.description || course.description;
     course.subject = req.body.subject && req.body.subject.trim() !== '' ? req.body.subject : course.subject;

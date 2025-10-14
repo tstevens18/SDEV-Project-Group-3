@@ -59,7 +59,19 @@ export default function CourseCard({ course, index, onEdit, onDelete, isTeacher 
           <div className="mb-3">
             <div className="mb-3">
               <label className="text-muted small fw-bold mb-2" style={{fontSize: '0.75rem', letterSpacing: '0.5px'}}>
-                TITLE
+                COURSE NUMBER
+              </label>
+              <h5 className="fw-bold mb-0" style={{
+                color: '#667eea',
+                fontSize: '1.1rem'
+              }}>
+                <i className="bi bi-hash me-1"></i>{course.courseNumber || 'N/A'}
+              </h5>
+            </div>
+
+            <div className="mb-3">
+              <label className="text-muted small fw-bold mb-2" style={{fontSize: '0.75rem', letterSpacing: '0.5px'}}>
+                COURSE NAME
               </label>
               <h4 className="fw-bold mb-0" style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

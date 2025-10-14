@@ -13,12 +13,16 @@ export default function CourseList() {
     showPopup,
     editingCourse,
     formData,
+    searchQuery,
     handleCreate,
     handleUpdate,
     handleDelete,
     handleOpenPopup,
     handleClosePopup,
-    handleInputChange
+    handleInputChange,
+    handleSearch,
+    handleSearchSubmit,
+    handleClearSearch
   } = useCourses();
 
   if (loading) return (
@@ -75,6 +79,54 @@ export default function CourseList() {
           You are viewing courses as a guest. <a href="#/login" className="alert-link">Login</a> to access more features.
         </div>
       )}
+
+      <div className="mb-4">
+        <div className="glass-card p-3">
+          <form onSubmit={(e) => { e.preventDefault(); handleSearchSubmit(); }}>
+            <div className="input-group">
+              <span className="input-group-text bg-transparent border-0">
+                <i className="bi bi-search"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control border-0 bg-transparent"
+                placeholder="Search by course name or course number (press Enter)..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearchSubmit();
+                  }
+                }}
+                style={{ boxShadow: 'none' }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="btn btn-link text-muted"
+                  onClick={handleClearSearch}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <i className="bi bi-x-circle"></i>
+                </button>
+              )}
+              <button
+                type="submit"
+                className="btn"
+                style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  border: 'none',
+                  color: '#fff',
+                  padding: '0.5rem 1rem'
+                }}
+              >
+                <i className="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <div className="row g-4">
         {courses.map((course, index) => (

@@ -7,7 +7,9 @@ export function useCourses() {
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({ 
+    courseNumber: '',
     title: '', 
     description: '', 
     subject: '', 
@@ -18,10 +20,10 @@ export function useCourses() {
     fetchCourses();
   }, []);
 
-  const fetchCourses = async () => {
+  const fetchCourses = async (search = '') => {
     try {
       setLoading(true);
-      const data = await courseService.fetchAll();
+      const data = await courseService.fetchAll(search);
       setCourses(data);
       setError(null);
     } catch (err) {
@@ -30,6 +32,19 @@ export function useCourses() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const handleSearchSubmit = () => {
+    fetchCourses(searchQuery);
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    fetchCourses(''); 
   };
 
   const handleCreate = async (e) => {
@@ -78,11 +93,13 @@ export function useCourses() {
   const handleOpenPopup = (course = null) => {
     setEditingCourse(course);
     setFormData(course ? { 
+      courseNumber: course.courseNumber,
       title: course.title, 
       description: course.description,
       subject: course.subject,
       credits: course.credits
     } : { 
+      courseNumber: '',
       title: '', 
       description: '',
       subject: '',
@@ -94,7 +111,7 @@ export function useCourses() {
   const handleClosePopup = () => {
     setShowPopup(false);
     setEditingCourse(null);
-    setFormData({ title: '', description: '', subject: '', credits: '' });
+    setFormData({ courseNumber: '', title: '', description: '', subject: '', credits: '' });
   };
 
   const handleInputChange = (e) => {
@@ -108,11 +125,15 @@ export function useCourses() {
     showPopup,
     editingCourse,
     formData,
+    searchQuery,
     handleCreate,
     handleUpdate,
     handleDelete,
     handleOpenPopup,
     handleClosePopup,
-    handleInputChange
+    handleInputChange,
+    handleSearch,
+    handleSearchSubmit,
+    handleClearSearch
   };
 }

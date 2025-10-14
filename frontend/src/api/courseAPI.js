@@ -11,9 +11,10 @@ const getAuthHeaders = () => {
 };
 
 export const courseService = {
-  async fetchAll() {
+  async fetchAll(searchQuery = '') {
     try {
-      const response = await fetch(API_URL);
+      const url = searchQuery ? `${API_URL}?search=${encodeURIComponent(searchQuery)}` : API_URL;
+      const response = await fetch(url);
       if (!response.ok) throw new Error(`Failed to fetch courses (Status: ${response.status})`);
       const data = await response.json();
       return data;
