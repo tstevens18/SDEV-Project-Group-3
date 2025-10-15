@@ -129,16 +129,39 @@ export default function CourseList() {
       </div>
 
       <div className="row g-4">
-        {courses.map((course, index) => (
-          <CourseCard
-            key={course._id}
-            course={course}
-            index={index}
-            onEdit={handleOpenPopup}
-            onDelete={handleDelete}
-            isTeacher={isTeacher()}
-          />
-        ))}
+        {courses.length === 0 ? (
+          <div className="col-12">
+            <div className="glass-card p-5 text-center">
+              <i className="bi bi-search text-muted" style={{fontSize: '4rem'}}></i>
+              <h4 className="mt-3 text-muted">No courses found</h4>
+              <p className="text-muted mb-0">
+                {searchQuery 
+                  ? `No courses match your search "${searchQuery}". Try a different search term.`
+                  : 'There are no courses available at the moment.'}
+              </p>
+              {searchQuery && (
+                <button
+                  className="btn btn-outline-primary mt-3"
+                  onClick={handleClearSearch}
+                >
+                  <i className="bi bi-arrow-counterclockwise me-2"></i>
+                  Clear Search
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          courses.map((course, index) => (
+            <CourseCard
+              key={course._id}
+              course={course}
+              index={index}
+              onEdit={handleOpenPopup}
+              onDelete={handleDelete}
+              isTeacher={isTeacher()}
+            />
+          ))
+        )}
       </div>
 
       {isTeacher() && (
